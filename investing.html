@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coach’s Money Playbook</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js (for graphs) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="wrap live">
+    <header class="topbar appear">
+      <a class="backlink" href="congrats.html">← back</a>
+
+      <div class="mode">
+        <span class="mode-label">Coach Mode</span>
+        <button id="modeToggle" class="toggle" aria-pressed="false">
+          <span class="dot"></span>
+          <span class="toggle-text">Simple</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero appear">
+      <h1 class="headline">THE COACH’S MONEY PLAYBOOK 💸</h1>
+      <p class="subhead">
+        Not financial advice — just a simple way to grow, enjoy life, and look after your people.
+      </p>
+
+      <div class="checklist appear">
+        <div class="check">
+          <span class="tick">✓</span>
+          <span><strong>Invest</strong> for future-you</span>
+        </div>
+        <div class="check">
+          <span class="tick">✓</span>
+          <span><strong>Spend on yourself</strong> (fuel + fitness + gear)</span>
+        </div>
+        <div class="check">
+          <span class="tick">✓</span>
+          <span><strong>Spend on your people</strong> (family + girlfriend 😌)</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <!-- Investing -->
+      <article class="panel appear">
+        <div class="panel-head">
+          <span class="badge">Your future</span>
+          <h2>Investing</h2>
+        </div>
+
+        <p>
+          One simple rule: start early, stay consistent, and don’t overthink it.
+        </p>
+
+        <p>
+          If I had to pick just one thing to quietly back in the background,
+          it would be <strong>SMH</strong> — a basket of companies behind the tech
+          powering the world.
+        </p>
+
+        <p class="nerdy" hidden>
+          Not advice because you already do invest and have plans haha but just a long-term, boring-in-a-good-way choice perhaps
+        </p>
+
+        <div class="micro">
+          <span class="pill">Set &amp; forget</span>
+          <span class="pill">Long-term</span>
+          <span class="pill">Quiet consistency</span>
+        </div>
+      </article>
+
+      <!-- Yourself -->
+      <article class="panel appear">
+        <div class="panel-head">
+          <span class="badge alt">You</span>
+          <h2>In yourself</h2>
+        </div>
+
+        <p>
+          This is non-negotiable.
+        </p>
+
+        <p>
+          Good food (since you only eat to fuel your body lmao). Gym. Recovery. Cricket gear.
+          Fresh gloves every month!!!!.
+        </p>
+
+        <p class="nerdy" hidden>
+          You’re the asset. Everything else works better if this is taken care of.
+        </p>
+
+        <div class="micro">
+          <span class="pill">Health</span>
+          <span class="pill">Performance</span>
+          <span class="pill">Longevity</span>
+        </div>
+      </article>
+
+      <!-- People -->
+      <article class="panel appear">
+        <div class="panel-head">
+          <span class="badge">Your people</span>
+          <h2>Loved ones</h2>
+        </div>
+
+        <p>
+          Family. Time. Memories. Maybe business class tix
+        </p>
+
+        <p>
+          And yes — your <strong>girlfriend</strong> 😌.
+        </p>
+
+        <p class="nerdy" hidden>
+          Money is only useful if it lets you show up for the people you love (i.e. buys you time and knowledge).
+        </p>
+
+        <div class="micro">
+          <span class="pill">Family</span>
+          <span class="pill">Generosity</span>
+          <span class="pill">Joy</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="charts">
+      <article class="panel appear">
+        <h2 class="chart-title">A simple split</h2>
+        <p class="chart-sub">
+          A balanced way to grow while still enjoying your life (and your people).
+        </p>
+        <div class="chart-wrap">
+          <canvas id="allocChart" aria-label="Allocation chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel appear">
+        <h2 class="chart-title">SMH (your “future” bucket)</h2>
+        <p class="chart-sub">
+          The idea isn’t to stress — it’s to build something quietly in the background.
+        </p>
+        <div class="chart-wrap" style="display:grid; place-items:center; min-height: 210px;">
+          <div style="font-weight:800; text-align:center; max-width: 520px;">
+            From every dollar you earn, let one part build your future, one part care for your loved ones, 
+            <div style="margin-top:10px; opacity:0.85; font-weight:600;">
+                and one part reward the person who’s working hard for them both - YOU
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <script>
+    // ----- Coach Mode toggle (Simple <-> Slightly Nerdy) -----
+    const toggle = document.getElementById("modeToggle");
+    const nerdyBlocks = document.querySelectorAll(".nerdy");
+    const toggleText = toggle.querySelector(".toggle-text");
+
+    function setMode(isNerdy) {
+      toggle.setAttribute("aria-pressed", String(isNerdy));
+      toggleText.textContent = isNerdy ? "Slightly Nerdy" : "Simple";
+      nerdyBlocks.forEach(el => el.hidden = !isNerdy);
+      document.body.classList.toggle("nerdy-on", isNerdy);
+    }
+
+    toggle.addEventListener("click", () => {
+      const isNerdy = toggle.getAttribute("aria-pressed") === "true";
+      setMode(!isNerdy);
+    });
+
+    setMode(false);
+
+    // ----- Entrance animations -----
+    const appearEls = document.querySelectorAll(".appear");
+    appearEls.forEach((el, i) => {
+      el.style.animationDelay = `${i * 90}ms`;
+    });
+
+    // ----- Pie chart -----
+    const allocCtx = document.getElementById("allocChart");
+    new Chart(allocCtx, {
+      type: "doughnut",
+      data: {
+        labels: ["Your future (Investing)", "Yourself", "Your people"],
+        datasets: [{
+          data: [50, 30, 20],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom" }
+        },
+        cutout: "65%"
+      }
+    });
+  </script>
+</body>
+</html>
